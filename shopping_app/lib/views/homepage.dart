@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:get/get.dart';
+import 'package:shopping_app/controller/product_controller.dart';
+import 'package:shopping_app/views/product_tile.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
+
+  final ProductController productController = Get.put(ProductController());
 
   @override
   Widget build(BuildContext context) {
@@ -42,19 +47,17 @@ class HomePage extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: StaggeredGridView.countBuilder(
-              crossAxisCount: 2,
-              itemCount: 100,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              itemBuilder: (context, index) {
-                return Container(
-                  height: 200,
-                  width: MediaQuery.of(context).size.width * 0.30,
-                  color: Colors.red,
-                );
-              },
-              staggeredTileBuilder: (index) => const StaggeredTile.fit(1),
+            child: Obx(
+              () => StaggeredGridView.countBuilder(
+                crossAxisCount: 2,
+                itemCount: productController.productList.length,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                itemBuilder: (context, index) {
+                  return ProductTile(productController.productList[index]);
+                },
+                staggeredTileBuilder: (index) => const StaggeredTile.fit(1),
+              ),
             ),
           ),
         ],
